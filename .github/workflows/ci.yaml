@@ -66,7 +66,7 @@ jobs:
     name: Run test suite
     runs-on: ubuntu-latest
     env:
-      COMPOSE_FILE: docker-compose.yml
+      COMPOSE_FILE: docker-compose.yaml
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
