@@ -18,7 +18,7 @@ repos:
       - id: check-symlinks # Detects broken symlinks.
       - id: trailing-whitespace # Removes any trailing whitespace at the end of lines.
       - id: end-of-file-fixer # Ensures files end with a single newline or are empty.
-  
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
