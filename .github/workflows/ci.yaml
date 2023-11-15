@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Cache pip dependencies
         uses: actions/cache@v3
@@ -61,3 +61,15 @@ jobs:
           else
             pre-commit run --from-ref origin/$DEFAULT_BRANCH --to-ref $CUR_SHA
           fi
+
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: docker-compose.yml
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build docker images
+      run: docker compose up --build semantic-test-runner

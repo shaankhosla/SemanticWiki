@@ -1,0 +1,25 @@
+version: '3.7'
+
+
+services:
+  semanticwiki:
+    container_name: semanticwiki
+    command: ["python3", "-m", "src.main"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  semantic-test-runner:
+    container_name: semantic-test-runner
+    command: ["pytest", "tests/", "--cov=src", "--cov-report=term-missing"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles:
+      - testing
+
+networks:
+  mynetwork:
+    external: false
+    driver: bridge
+    name: mynetwork
