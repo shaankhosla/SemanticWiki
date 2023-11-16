@@ -64,6 +64,7 @@ jobs:
 
   test:
     name: Run test suite
+    needs: precommit
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: docker-compose.yaml
