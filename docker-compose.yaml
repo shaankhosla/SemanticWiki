@@ -4,10 +4,12 @@ version: '3.7'
 services:
   semanticwiki:
     container_name: semanticwiki
-    command: ["python3", "-m", "src.main"]
+    command: ["python3", "-m", "streamlit", "run", "src/app.py", "--browser.gatherUsageStats", "false"]
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
 
   semantic-test-runner:
     container_name: semantic-test-runner
