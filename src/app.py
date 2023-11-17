@@ -1,8 +1,9 @@
+from collections import Counter
+
+import matplotlib.pyplot as plt
+import pandas as pd
 import streamlit as st
 from wordcloud import WordCloud
-import matplotlib.pyplot as plt
-from collections import Counter
-import pandas as pd
 
 # Sample random text data
 text_data = """
@@ -37,6 +38,3 @@ df_words = pd.DataFrame(word_counts.items(), columns=["Word", "Frequency"]).sort
     by="Frequency", ascending=False
 )
 st.bar_chart(df_words.set_index("Word"))
-
-# Run this script with:
-# streamlit run your_script_name.py
