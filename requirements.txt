@@ -5,3 +5,7 @@ streamlit==1.28.2
 pytest
 pytest-cov
 pytest-mock
+
+#wiki api
+
+wikipedia
