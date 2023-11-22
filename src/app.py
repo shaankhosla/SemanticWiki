@@ -59,8 +59,6 @@ df_words = pd.DataFrame(word_counts.items(), columns=["Word", "Frequency"]).sort
     by="Frequency", ascending=False
 )
 st.bar_chart(df_words.set_index("Word"))
-<<<<<<< HEAD:src/app.py
-=======
 
 # Run this script with:
 # streamlit run your_script_name.py
@@ -125,4 +123,3 @@ fig = px.scatter_3d(
 
 # Show the plot in Streamlit
 st.plotly_chart(fig)
->>>>>>> 8ffd7f5 (added PCA and t-SNA):src/app/app.py
