@@ -1,48 +1,47 @@
-import wikipedia
-import pandas as pd
+import multiprocessing as mp
+
+import pandas as pd  # type: ignore
+import wikipedia  # type: ignore
+from more_itertools import chunked  # type: ignore
+from retry import retry  # type: ignore
+
+from src import schemas
+
+wikipedia.set_rate_limiting(rate_limit=True)
 
 
-def getwikidata(query):
+@retry(tries=3, delay=2, backoff=2)
+def get_page_from_title(title: str) -> schemas.WikiDocument | None:
     try:
-        page = wikipedia.page(query)
-    except ValueError:
-        print(f"This query {query} not match any page.")
-        return
+        page = wikipedia.page(title=title, preload=True)
+        doc = schemas.WikiDocument(
+            content=page.content,
+            summary=page.summary,
+            title=title,
+            links=page.links,
+        )
+        return doc
 
-    url = page.url
-    q = "_".join(query.split(" "))
+    except Exception as e:
+        print(e)
+        return None
 
-    data = {
-        "title": [],
-        "contents": [],
-        "summaries": [],
-        "urls": [],
-        "categories": [],
-        "links": [],
-    }
-    data["title"].append(q)
-    data["summaries"].append(page.summary)
-    data["categories"].append(",".join(page.categories))
-    data["links"].append(",".join(page.links))
-    data["urls"].append(page.url)
-    if url.split("/")[-1] == q:
-        ## query is the title of page in wiki
-        data["contents"].append(page.content)
 
-    else:
-        data["contents"].append("")
-        print(len(page.links))
-        for link in page.links:
-            print(link)
-            try:
-                new = wikipedia.page(link)
-                data["title"].append(link)
-                data["contents"].append(new.content)
-                data["summaries"].append(new.summary)
-                data["categories"].append(",".join(new.categories))
-                data["links"].append(",".join(new.links))
-                data["urls"].append(new.url)
-            except ValueError:
-                print(f"This id {link} not match any page")
+@retry(tries=3, delay=2, backoff=2)
+def get_random_title(pages: int = 1) -> list[str]:
+    return wikipedia.random(pages=pages)
 
-    return pd.DataFrame(data)
+
+def getwikidata(n: int = 100) -> pd.DataFrame:
+    # wikipedia blocks more than 10
+    chunks = list(chunked(range(n), 10))
+    titles = []
+    for chunk in chunks:
+        titles += get_random_title(pages=len(chunk))
+
+    with mp.Pool(5) as p:
+        results = list(p.map(get_page_from_title, titles))
+
+    results = [model.model_dump() for model in results if model]
+    df = pd.DataFrame(results)
+    return df
