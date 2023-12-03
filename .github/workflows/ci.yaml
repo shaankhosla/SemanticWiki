@@ -84,4 +84,4 @@ jobs:
           ${{ runner.os }}-buildx-
 
     - name: Build docker images
-      run: docker compose up --build semantic-test-runner
+      run: docker compose up --exit-code-from tests tests

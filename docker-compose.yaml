@@ -11,8 +11,8 @@ services:
     ports:
       - "8501:8501"
 
-  semantic-test-runner:
-    container_name: semantic-test-runner
+  tests:
+    container_name: tests
     command: ["pytest", "tests/", "--cov=src", "--cov-report=term-missing"]
     build:
       context: .
