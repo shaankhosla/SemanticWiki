@@ -37,7 +37,7 @@ docker compose up --build tests
 ```
 
 
-## Technologies and packages 
+## Technologies and packages
 
 - **Python**: The primary programming language for data extraction/processing and visualization.
 - **Streamlit**: For creating the interactive web application.
@@ -51,4 +51,4 @@ docker compose up --build tests
 
 ## Acknowledgments
 
-We would like to Thank Professor `Jeremy Curuksu` and the teaching assistants for their guidance and support throughout the project. 
+We would like to Thank Professor `Jeremy Curuksu` and the teaching assistants for their guidance and support throughout the project.
