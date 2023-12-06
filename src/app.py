@@ -10,7 +10,7 @@ from src.extract import getwikidata
 from src.vectorizer import Vectorizer
 
 
-def title():
+def title() -> None:
     st.header("Semantic Wiki")
     st.subheader("by Shaan Khosla, Shiqi Yang, and Teo Zeng")
     st.write(
@@ -21,7 +21,17 @@ def title():
     st.write(
         f"The articles had an average word count of {sum(word_counts)/len(word_counts):.1f} words"
     )
-    st.write(f"The articles had an average of {sum(links)/len(links):.1f} links")
+    st.write(
+        f"The articles had an average of {sum(links)/len(links):.1f} outgoing links"
+    )
+    all_links = [
+        item for sublist in wiki_data_df.links.values.tolist() for item in sublist
+    ]
+    link_counts = Counter(all_links)
+    most_popular_link = max(link_counts, key=link_counts.get)
+    st.write(
+        f"The most common outgoing link was for {most_popular_link} with {link_counts[most_popular_link]} links"
+    )
 
     table_of_contents = pd.DataFrame()
     table_of_contents["Title"] = wiki_data_df.title.values.tolist()
@@ -31,7 +41,7 @@ def title():
     st.table(table_of_contents)
 
 
-def wordcloud_plot():
+def wordcloud_plot() -> None:
     st.set_option("deprecation.showPyplotGlobalUse", False)
     # Generate and display a word cloud
     st.header("Word Cloud")
@@ -45,7 +55,7 @@ def wordcloud_plot():
     st.pyplot()
 
 
-def frequency_plot():
+def frequency_plot() -> None:
     # Display a frequency distribution of the words
     st.header("Frequency Distribution")
     text = " ".join(wiki_data_df["content"].values.tolist())
@@ -57,7 +67,7 @@ def frequency_plot():
     st.bar_chart(df_words.set_index("Word"))
 
 
-def scatter_plot():
+def scatter_plot() -> None:
     # Vectorize the text
     st.header("PCA")
     st.write(
@@ -98,7 +108,6 @@ def scatter_plot():
 
 def main():
     title()
-    # text_area = st.text_area("Edit the text", text_data, height=150)
     wordcloud_plot()
     frequency_plot()
     scatter_plot()
