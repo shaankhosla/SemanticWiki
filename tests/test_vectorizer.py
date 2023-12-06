@@ -40,3 +40,9 @@ def test_dimensionality_reduction_output_shape(vectorizer):
     components = 2
     reduced = vectorizer.dimensionality_reduction(vectors, components)
     assert reduced.shape == (len(text), components)
+
+    text = ["Hello world", "Testing sentence"]
+    vectors = vectorizer.vectorize(text)
+    components = 3
+    with pytest.raises(Exception):
+        reduced = vectorizer.dimensionality_reduction(vectors, components)

@@ -14,7 +14,7 @@ def test_get_page_from_title():
         "In software engineering, a test case is a specification of the inputs, execution conditions"
         in result.content
     )
-    assert "Agile software development" in result.links
+    assert "http://www.stickyminds.com/s.asp?F=S15689_ART_2" in result.links
 
     result = extract.get_page_from_title("sdihfoisdhgoishgoishdjofjoighosjfoishf")
     assert result is None

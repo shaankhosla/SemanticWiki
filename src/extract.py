@@ -18,7 +18,7 @@ def get_page_from_title(title: str) -> schemas.WikiDocument | None:
             content=page.content,
             summary=page.summary,
             title=title,
-            links=page.links,
+            links=page.references,
         )
         return doc
 
