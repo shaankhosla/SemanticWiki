@@ -21,5 +21,9 @@ class Vectorizer:
     def dimensionality_reduction(
         self, vectors: list[np.ndarray], components: int = 2
     ) -> np.ndarray:
+        if len(vectors) < components:
+            raise Exception(
+                f"Number of vectors {len(vectors)} not greater than components {components}"
+            )
         pca = PCA(n_components=components)
         return pca.fit_transform(vectors)
