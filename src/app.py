@@ -45,9 +45,22 @@ def wordcloud_plot() -> None:
     st.set_option("deprecation.showPyplotGlobalUse", False)
     # Generate and display a word cloud
     st.header("Word Cloud")
-    wordcloud = WordCloud(width=800, height=400, background_color="white").generate(
-        " ".join(wiki_data_df["content"].values.tolist())
+
+    st.write(
+        """
+    A word cloud is a visual representation where words from a text are displayed in various sizes based on their frequency or importance.
+    Words appearing more frequently are shown larger, making it easy to identify prominent themes or topics at a glance.
+    """
     )
+
+    wordcloud = WordCloud(
+        width=1600,
+        height=800,
+        background_color="black",
+        contour_width=3,
+        contour_color="steelblue",
+    ).generate(" ".join(wiki_data_df["content"].values.tolist()))
+
     plt.figure(figsize=(8, 8), facecolor=None)
     plt.imshow(wordcloud)
     plt.axis("off")
@@ -64,7 +77,25 @@ def frequency_plot() -> None:
         word_counts.items(),
         columns=["Word", "Frequency"],
     ).sort_values(by="Frequency", ascending=False)
-    st.bar_chart(df_words.set_index("Word"))
+
+    # Using Plotly for more control over the chart
+    fig = px.bar(df_words, x="Word", y="Frequency")
+    fig.update_layout(xaxis={"categoryorder": "total descending"})
+    st.plotly_chart(fig)
+
+    # Analyze and write a summary paragraph
+    total_words = sum(word_counts.values())
+    most_common_word, highest_frequency = df_words.iloc[0]
+    unique_words = len(word_counts)
+    words_appearing_once = sum(1 for word, count in word_counts.items() if count == 1)
+
+    summary = f"""
+    The chart above displays the frequency distribution of words in the dataset.
+    A total of {total_words} words were analyzed, among which there are {unique_words} unique words.
+    The most common word is '{most_common_word}' with a frequency of {highest_frequency}.
+    Interestingly, {words_appearing_once} words appear only once in the entire dataset.
+    """
+    st.write(summary)
 
 
 def scatter_plot() -> None:
@@ -119,6 +150,7 @@ if __name__ == "__main__":
         wiki_data_df = st.session_state.wiki_data_df
     else:
         # gather
-        wiki_data_df = getwikidata(2)
+        wiki_data_df = getwikidata(10)
+        print(wiki_data_df)
         st.session_state.wiki_data_df = wiki_data_df
     main()
